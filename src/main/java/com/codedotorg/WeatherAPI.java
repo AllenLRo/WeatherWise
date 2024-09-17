@@ -44,7 +44,7 @@ public class WeatherAPI {
      * Returns the weather forecast for a given city using the OpenWeatherMap API.
      * 
      * @param city the name of the city to get the forecast for
-     * @return a string containing the forecast for the next 5 days, with the date
+     * @return a string containing the forecast for the next 7 days, with the date
      *         and temperature in Fahrenheit
      */
     public static String getForecast(String city) {
@@ -59,13 +59,19 @@ public class WeatherAPI {
             JSONArray list = obj.getJSONArray("list");
 
             StringBuilder forecast = new StringBuilder();
+            int count = 0;
 
             for (int i = 0; i < list.length(); i++) {
                 JSONObject item = list.getJSONObject(i);
-                JSONObject main = item.getJSONObject("main");
-                double temp = main.getDouble("temp");
                 String date = item.getString("dt_txt");
-                forecast.append(date + ": " + String.format("%.2f", temp) + "°F\n");
+
+                // Check if the time is 12:00:00 (noon) and we haven't already added 7 days
+                if (date.contains("12:00:00") && count < 7) {
+                    JSONObject main = item.getJSONObject("main");
+                    double temp = main.getDouble("temp");
+                    forecast.append(date + ": " + String.format("%.2f", temp) + "°F\n");
+                    count++;
+                }
             }
             
             return forecast.toString();

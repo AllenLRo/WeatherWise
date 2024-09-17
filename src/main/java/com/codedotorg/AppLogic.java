@@ -16,6 +16,9 @@ public class AppLogic {
             return getCurrentWeather(city);
         }
         
+        if (buttonText.equals("Get 7 Day Forecast")) {
+            return getWeekForecast(city);
+        }
         return "";
     }
     
@@ -37,8 +40,8 @@ public class AppLogic {
      * @return a string containing the forecast information
      */
     public String getWeekForecast(String city) {
-        
-        return "";
+        String response = WeatherAPI.getForecast(city);
+        return response;
     }
 
     /**
